@@ -30,7 +30,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-
+        <activity android:name=".BarCodeScannerActivity"
+                  android:configChanges="orientation"
+                  android:label="@string/app_barcode_name">
+        </activity>
 
 
         <provider
