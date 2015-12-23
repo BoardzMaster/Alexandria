@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -60,6 +62,34 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
         ean.setText(BarCode);
     }
 
+    // Function checks the Internet connection
+    private  boolean isInternetConnected(Context ct)
+    {
+        boolean connected;
+        //get the connectivity manager object to identify the network state.
+        ConnectivityManager connectivityManager = (ConnectivityManager)ct.getSystemService(Context.CONNECTIVITY_SERVICE);
+        //Check if the manager object is NULL, this check is required. to prevent crashes in few devices.
+        if(connectivityManager != null)
+        {
+            //Check Mobile data or Wifi net is present
+            if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                    connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED)
+            {
+                //we are connected to a network
+                connected = true;
+            }
+            else
+            {
+                connected = false;
+            }
+            return connected;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -88,12 +118,21 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
                     clearFields();
                     return;
                 }
-                //Once we have an ISBN, start a book intent
-                Intent bookIntent = new Intent(getActivity(), BookService.class);
-                bookIntent.putExtra(BookService.EAN, ean);
-                bookIntent.setAction(BookService.FETCH_BOOK);
-                getActivity().startService(bookIntent);
-                AddBook.this.restartLoader();
+                if (isInternetConnected(getContext()) == true) {
+                    //Once we have an ISBN, start a book intent
+                    Intent bookIntent = new Intent(getActivity(), BookService.class);
+                    bookIntent.putExtra(BookService.EAN, ean);
+                    bookIntent.setAction(BookService.FETCH_BOOK);
+                    getActivity().startService(bookIntent);
+                    AddBook.this.restartLoader();
+                }else
+                {
+                    Toast.makeText(getContext(), R.string.internet_connection_failed , Toast.LENGTH_LONG).show();
+                    clearFields();
+                    return;
+                }
+
+
             }
         });
 

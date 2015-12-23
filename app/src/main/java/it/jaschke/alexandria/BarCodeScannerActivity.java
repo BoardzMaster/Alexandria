@@ -48,8 +48,7 @@ public class BarCodeScannerActivity extends ActionBarActivity implements ZXingSc
 
     @Override
     public void handleResult(Result rawResult) {
-        Toast.makeText(this, "Contents = " + rawResult.getText() +
-                ", Format = " + rawResult.getBarcodeFormat().toString(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Contents = " + rawResult.getText() + ", Format = " + rawResult.getBarcodeFormat().toString(), Toast.LENGTH_SHORT).show();
 
         // Return the result to the AddBook fragment
         Intent intent = new Intent();

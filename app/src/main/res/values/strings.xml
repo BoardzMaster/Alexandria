@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Alexandria</string>
+    <string name="app_barcode_name">ZXing</string>
 
     <!-- Menu Items -->
     <string name="books">List of Books</string>
@@ -13,6 +14,7 @@
     <string name="scan_button">Scan</string>
     <string name="input_hint">Insert ISBN-13. Digits only.</string>
     <string name="book_cover">Bookcover</string>
+    <string name="internet_connection_failed">Can't do the search. There is no the Internet connection.</string>
 
     <string name="ok_button">Next</string>
     <string name="cancel_button">Cancel</string>
