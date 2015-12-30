@@ -14,7 +14,7 @@
     <string name="scan_button">Scan</string>
     <string name="input_hint">Insert ISBN-13. Digits only.</string>
     <string name="book_cover">Bookcover</string>
-    <string name="internet_connection_failed">Can't do the search. There is no the Internet connection.</string>
+    <string name="internet_connection_failed">Cant do the search. There is no the Internet connection.</string>
 
     <string name="ok_button">Next</string>
     <string name="cancel_button">Cancel</string>
@@ -26,6 +26,15 @@
     <string name="action_share">Share</string>
     <string name="back_button">go back</string>
     <string name="share_text">A must read book: </string>
+
+    <string name="no_title">No Title</string>
+    <string name="no_subtitle">No Subtitle</string>
+    <string name="no_book_desc">No Book Description</string>
+    <string name="no_author">No Author</string>
+    <string name="no_category">No Category</string>
+
+    <string name="EAN_KEY">EAN_KEY</string>
+    <string name="SHARED_PROVIDER">SHARED_PROVIDER</string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="about_text">This application gets book information from a Google API. All titles, cover images, and author information come from there.

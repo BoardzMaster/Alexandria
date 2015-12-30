@@ -39,8 +39,23 @@ public class BookDetail extends Fragment implements LoaderManager.LoaderCallback
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        if (savedInstanceState==null || !savedInstanceState.containsKey(getString(R.string.EAN_KEY)))
+        {
+
+        }
+        else
+        {
+            ean = savedInstanceState.getString(getString(R.string.EAN_KEY));
+            getLoaderManager().restartLoader(LOADER_ID, null, this);
+        }
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putString(getString(R.string.EAN_KEY), ean);
+        super.onSaveInstanceState(outState);
+    }
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -65,13 +80,22 @@ public class BookDetail extends Fragment implements LoaderManager.LoaderCallback
         return rootView;
     }
 
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.book_detail, menu);
 
         MenuItem menuItem = menu.findItem(R.id.action_share);
         shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+
+        // the Book Detail fragment no longer crashes
+        if (bookTitle != null) {
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+            shareIntent.setType("text/plain");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text) + bookTitle);
+
+            shareActionProvider.setShareIntent(shareIntent);
+        }
     }
 
     @Override
@@ -92,25 +116,53 @@ public class BookDetail extends Fragment implements LoaderManager.LoaderCallback
             return;
         }
 
+        /*I found out that every piece of a book's information in the database should be checked;
+          There are barcodes that don't contain some info about a book.
+         */
         bookTitle = data.getString(data.getColumnIndex(AlexandriaContract.BookEntry.TITLE));
-        ((TextView) rootView.findViewById(R.id.fullBookTitle)).setText(bookTitle);
+        if (bookTitle == null)
+        {
+            ((TextView) rootView.findViewById(R.id.fullBookTitle)).setText(R.string.no_title);
+        }
+        else
+        {
+            ((TextView) rootView.findViewById(R.id.fullBookTitle)).setText(bookTitle);
 
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
-        shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text)+bookTitle);
-        shareActionProvider.setShareIntent(shareIntent);
+        }
 
         String bookSubTitle = data.getString(data.getColumnIndex(AlexandriaContract.BookEntry.SUBTITLE));
-        ((TextView) rootView.findViewById(R.id.fullBookSubTitle)).setText(bookSubTitle);
+        if (bookSubTitle == null)
+        {
+            ((TextView) rootView.findViewById(R.id.fullBookSubTitle)).setText(R.string.no_subtitle);
+        }
+        else
+        {
+            ((TextView) rootView.findViewById(R.id.fullBookSubTitle)).setText(bookSubTitle);
+        }
+
 
         String desc = data.getString(data.getColumnIndex(AlexandriaContract.BookEntry.DESC));
-        ((TextView) rootView.findViewById(R.id.fullBookDesc)).setText(desc);
+        if (desc == null)
+        {
+            ((TextView) rootView.findViewById(R.id.fullBookDesc)).setText(R.string.no_book_desc);
+        }
+        else
+        {
+            ((TextView) rootView.findViewById(R.id.fullBookDesc)).setText(desc);
+        }
 
         String authors = data.getString(data.getColumnIndex(AlexandriaContract.AuthorEntry.AUTHOR));
-        String[] authorsArr = authors.split(",");
-        ((TextView) rootView.findViewById(R.id.authors)).setLines(authorsArr.length);
-        ((TextView) rootView.findViewById(R.id.authors)).setText(authors.replace(",","\n"));
+        if (authors == null)
+        {
+            ((TextView) rootView.findViewById(R.id.authors)).setText(R.string.no_author);
+        }
+        else
+        {
+            String[] authorsArr = authors.split(",");
+            ((TextView) rootView.findViewById(R.id.authors)).setLines(authorsArr.length);
+            ((TextView) rootView.findViewById(R.id.authors)).setText(authors.replace(",","\n"));
+        }
+
         String imgUrl = data.getString(data.getColumnIndex(AlexandriaContract.BookEntry.IMAGE_URL));
         if(Patterns.WEB_URL.matcher(imgUrl).matches()){
             new DownloadImage((ImageView) rootView.findViewById(R.id.fullBookCover)).execute(imgUrl);
@@ -118,6 +170,14 @@ public class BookDetail extends Fragment implements LoaderManager.LoaderCallback
         }
 
         String categories = data.getString(data.getColumnIndex(AlexandriaContract.CategoryEntry.CATEGORY));
+        if (authors == null)
+        {
+            ((TextView) rootView.findViewById(R.id.categories)).setText(R.string.no_category);
+        }
+        else
+        {
+            ((TextView) rootView.findViewById(R.id.categories)).setText(categories);
+        }
         ((TextView) rootView.findViewById(R.id.categories)).setText(categories);
 
         if(rootView.findViewById(R.id.right_container)!=null){
