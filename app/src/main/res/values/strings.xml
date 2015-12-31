@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Alexandria</string>
-    <string name="app_barcode_name">ZXing</string>
+    <string name="app_name" translatable="false">Alexandria</string>
+    <string name="app_barcode_name" translatable="false"> ZXing</string>
 
     <!-- Menu Items -->
     <string name="books">List of Books</string>
@@ -33,8 +33,8 @@
     <string name="no_author">No Author</string>
     <string name="no_category">No Category</string>
 
-    <string name="EAN_KEY">EAN_KEY</string>
-    <string name="SHARED_PROVIDER">SHARED_PROVIDER</string>
+    <string name="EAN_KEY" translatable="false">EAN_KEY</string>
+    <string name="SHARED_PROVIDER" translatable="false">SHARED_PROVIDER</string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="about_text">This application gets book information from a Google API. All titles, cover images, and author information come from there.
